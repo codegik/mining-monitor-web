@@ -1,0 +1,99 @@
+<div class="page-content">
+  <form name="warehouseForm" #warehouseForm="ngForm">
+    <div fxLayout="row">
+      <md-card class="page-card" *ngFor="let chamber of warehouse.chambers" layout="vertical" style="display: inline-block">
+        <md-card-title>Chamber {{chamber.name}}</md-card-title>
+        <md-card-content>
+            <div class="card-form-input" fxflex>
+              <md-input-container>
+                <input mdInput placeholder="Temperature 1" type="number" [(ngModel)]="chamber.temperature1" name="temperature1" #temperature1="ngModel" required>
+              </md-input-container>
+              <md-input-container>
+                <input mdInput placeholder="Temperature 2" type="number" [(ngModel)]="chamber.temperature2" name="temperature2" #temperature2="ngModel" required>
+              </md-input-container>
+              <md-input-container>
+                <input mdInput placeholder="Humidity" type="number" [(ngModel)]="chamber.humidity" name="humidity" #humidity="ngModel" required>
+              </md-input-container>
+            </div>
+        </md-card-content>
+      </md-card>
+      <md-card class="page-card" layout="vertical" style="display: inline-block">
+        <md-card-title>Outside</md-card-title>
+        <md-card-content>
+            <div class="card-form-input" fxflex>
+              <md-input-container>
+                <input mdInput placeholder="Temperature 1" type="number" [(ngModel)]="warehouse.outside.temperature1" name="warehouseOutsideTemperature1" #warehouseOutsideTemperature1="ngModel" required>
+              </md-input-container>
+              <md-input-container>
+                <input mdInput placeholder="Temperature 2" type="number" [(ngModel)]="warehouse.outside.temperature2" name="warehouseOutsideTemperature2" #warehouseOutsideTemperature2="ngModel" required>
+              </md-input-container>
+              <md-input-container>
+                <input mdInput placeholder="Humidity" type="number" [(ngModel)]="warehouse.outside.humidity" name="warehouseOutsideHumidity" #warehouseOutsideHumidity="ngModel" required>
+              </md-input-container>
+            </div>
+        </md-card-content>
+      </md-card>
+    </div>
+    <md-card class="page-card">
+      <md-card-actions>
+        <button type="submit" md-raised-button [disabled]="!warehouseForm.form.valid || isSaving" (click)="insert(warehouse)">
+          <i class="material-icons">save</i>
+          <span>Save</span>
+        </button>
+      </md-card-actions>
+      <md-card-footer *ngIf="isSaving">
+        <md-progress-bar mode="indeterminate"></md-progress-bar>
+      </md-card-footer>
+    </md-card>
+  </form>
+  <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" fxFlex md-dynamic-height>
+    <md-card class="page-card card-content-full widget-table" fxFlex>
+      <md-card-title>
+        <span md-line>Warehouse history</span>
+      </md-card-title>
+      <md-card-content>
+        <section class="bs">
+          <table class="table table-sm table-striped table-hover table-card">
+            <thead>
+              <tr>
+                <th>Chamber 1</th>
+                <th>Chamber 2</th>
+                <th>Chamber 3</th>
+                <th>Outside</th>
+                <th>Pool</th>
+                <th class="text-center">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let warehouse of warehouseList">
+                <td>
+                  <span class="text-nowrap">{{warehouse.chambers[0].temperature1}}˚C {{warehouse.chambers[0].temperature2}}˚C {{warehouse.chambers[0].humidity}}%</span>
+                </td>
+                <td>
+                  <span class="text-nowrap">{{warehouse.chambers[1].temperature1}}˚C {{warehouse.chambers[1].temperature2}}˚C {{warehouse.chambers[1].humidity}}%</span>
+                </td>
+                <td>
+                  <span class="text-nowrap">{{warehouse.chambers[2].temperature1}}˚C {{warehouse.chambers[2].temperature2}}˚C {{warehouse.chambers[2].humidity}}%</span>
+                </td>
+                <td>
+                  <span class="text-nowrap">{{warehouse.outside.temperature1}}˚C {{warehouse.outside.temperature2}}˚C {{warehouse.outside.humidity}}%</span>
+                </td>
+                <td class="cell-detail">
+                  <div *ngIf="warehouse.indicators">
+                    <span class="cell-detail-description text-nowrap" *ngFor="let indicator of warehouse.indicators">
+                      {{indicator.user}}: {{indicator.statistic.s9Total}} Workers {{indicator.statistic.s9TotalHashesLabel}}
+                    </span>
+                  </div>
+                </td>
+                <td class="cell-detail text-center">
+                  <span>{{warehouse.createdDate | date:'dd/MM/y'}}</span>
+                  <span class="cell-detail-description">{{warehouse.createdDate | date:'shortTime'}}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </md-card-content>
+    </md-card>
+  </div>
+</div>

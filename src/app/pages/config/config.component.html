@@ -1,0 +1,98 @@
+<div class="page-content">
+  <div fxLayout="row" fxLayout.xs="column" fxLayout.lg="column" fxLayout.md="column" fxLayout.sm="column" fxLayoutAlign="center">
+    <md-card class="page-card">
+      <md-card-title>Dashboard configuration</md-card-title>
+      <md-card-content>
+        <div fxLayout="column" fxLayout.xs="column" fxLayout.sm="column">
+          <div class="card-form-input" fxflex>
+            <md-input-container>
+              <input mdInput placeholder="Antminer IP reporter port" type="number" [(ngModel)]="config.ip_reporter_port" name="ipReporterPort" #ipReporterPort="ngModel" required disabled="true">
+            </md-input-container>
+            <p class="text-danger" *ngIf="ipReporterPort.errors?.required">Ip reporter por is required.</p>
+          </div>
+          <div class="card-form-input" fxflex>
+            <md-input-container>
+              <input mdInput placeholder="Rest service port" type="number" [(ngModel)]="config.rest_port" name="quitPort" #quitPort="ngModel" required disabled="true">
+            </md-input-container>
+            <p class="text-danger" *ngIf="quitPort.errors?.required">Quit port is required.</p>
+          </div>
+        </div>
+        <div fxLayout="column" fxLayout.xs="column" fxLayout.sm="column">
+          <div class="card-form-input" fxflex>
+            <md-input-container>
+              <input mdInput placeholder="Report email from" type="text" [(ngModel)]="config.email_from" name="emailFrom" #emailFrom="ngModel" required disabled="true">
+            </md-input-container>
+            <p class="text-danger" *ngIf="emailFrom.errors?.required">Report email from is required.</p>
+          </div>
+          <div class="card-form-input" fxflex>
+            <md-input-container>
+              <input mdInput placeholder="Report email to" type="text" [(ngModel)]="config.email_to" name="emailTo" #emailTo="ngModel" required disabled="true">
+            </md-input-container>
+            <p class="text-danger" *ngIf="emailTo.errors?.required">Report email to is required.</p>
+          </div>
+          <div class="card-form-input" fxflex>
+            <md-input-container>
+              <input mdInput placeholder="Set database history save interval" type="number" [(ngModel)]="config.database_history_interval" name="databaseHistoryInterval" #databaseHistoryInterval="ngModel" required disabled="true">
+            </md-input-container>
+            <p class="text-danger" *ngIf="databaseHistoryInterval.errors?.required">Database history save is required.</p>
+          </div>
+        </div>
+      </md-card-content>
+    </md-card>
+    <md-card class="page-card">
+      <md-card-title>Alerts configuration</md-card-title>
+      <md-card-content>
+        <div fxLayout="column" fxLayout.xs="column" fxLayout.sm="column">
+          <div class="card-form-input" fxflex>
+            <md-input-container>
+              <input mdInput placeholder="Warning temperature" type="number" [(ngModel)]="config.monitor_maxtemp" name="monitorMaxtemp" #monitorMaxtemp="ngModel" required disabled="true">
+            </md-input-container>
+            <p class="text-danger" *ngIf="monitorMaxtemp.errors?.required">Max temperature is required.</p>
+          </div>
+          <div class="card-form-input" fxflex>
+            <md-input-container>
+              <input mdInput placeholder="Critical temperature" type="number" [(ngModel)]="config.monitor_shutdowntemp" name="monitorShutdowntemp" #monitorShutdowntemp="ngModel" required disabled="true">
+            </md-input-container>
+            <p class="text-danger" *ngIf="monitorShutdowntemp.errors?.required">Critical temperature is required.</p>
+          </div>
+        </div>
+      </md-card-content>
+    </md-card>
+    <md-card class="page-card">
+      <md-card-title>Services configuration</md-card-title>
+      <md-card-content>
+        <div fxLayout="column" fxLayout.xs="column" fxLayout.sm="column">
+          <div class="card-form-input" fxflex>
+            <md-input-container>
+              <input mdInput placeholder="Database url" type="text" [(ngModel)]="config.database_url" name="databaseUrl" #databaseUrl="ngModel" required disabled>
+            </md-input-container>
+            <p class="text-danger" *ngIf="databaseUrl.errors?.required">Database url is required.</p>
+          </div>
+          <div class="card-form-input" fxflex>
+            <md-input-container>
+              <input mdInput placeholder="Database statistic url" type="text" [(ngModel)]="config.database_statistic_url" name="databaseStatisticUrl" #databaseStatisticUrl="ngModel" required disabled>
+            </md-input-container>
+            <p class="text-danger" *ngIf="databaseStatisticUrl.errors?.required">Database statistic url is required.</p>
+          </div>
+          <div class="card-form-input" fxflex>
+            <md-input-container>
+              <input mdInput placeholder="Rabbit queue" type="text" [(ngModel)]="config.rabbit_url" name="rabbitUrl" #rabbitUrl="ngModel" required disabled="true">
+            </md-input-container>
+            <p class="text-danger" *ngIf="rabbitUrl.errors?.required">Rabbit url is required.</p>
+          </div>
+        </div>
+      </md-card-content>
+    </md-card>
+    <md-card class="page-card">
+      <md-card-actions>
+        <button md-raised-button disabled="true">
+          <i class="material-icons">save</i>
+          <span>Save</span>
+        </button>
+      </md-card-actions>
+      <md-card-footer *ngIf="isSaving">
+          <md-progress-bar mode="indeterminate"></md-progress-bar>
+      </md-card-footer>
+    </md-card>
+  </div>
+</div>

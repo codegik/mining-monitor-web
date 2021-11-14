@@ -1,0 +1,12 @@
+version: '3'
+services:
+  mining-monitor-web:
+    image: versates/mining-monitor-web
+    ports:
+      - 80:80
+    links:
+      - mining-monitor
+  mining-monitor:
+    image: versates/mining-monitor
+    ports:
+      - 3000:3000

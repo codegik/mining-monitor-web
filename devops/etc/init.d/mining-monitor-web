@@ -1,0 +1,34 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          mining-monitor-web
+# Required-Start:    $all
+# Required-Stop:     
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Mining monitor web
+### END INIT INFO
+
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/bin:/home/inacio/.nvm/versions/node/v6.11.2/bin
+
+. /lib/init/vars.sh
+. /lib/lsb/init-functions
+
+case "$1" in
+  start)
+      log_begin_msg "Starting mining-monitor-web service"
+      /var/versates/mining-monitor-web.sh
+      log_end_msg $?
+      exit 0
+      ;;
+  stop)
+      log_begin_msg "Stopping mining-monitor-web unfortunately"
+      kill $(ps aux | grep 'angular/cli' | awk '{print $2}')
+      log_end_msg $?
+      exit 0
+      ;;
+  *)
+      echo "Usage: /etc/init.d/mining-monitor-web {start|stop}"
+      exit 1
+      ;;
+esac
+

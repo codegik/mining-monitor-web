@@ -1,0 +1,28 @@
+<h2 md-dialog-title>Edit {{data.network.ip}}</h2>
+<md-dialog-content>
+  <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxFlex>
+    <div class="card-form-input" fxflex>
+      <md-input-container>
+        <input mdInput placeholder="Column" type="number" min="0" [(ngModel)]="place.column" name="column" #column="ngModel" required>
+      </md-input-container>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxFlex>
+    <div class="card-form-input" fxflex>
+      <md-input-container>
+        <input mdInput placeholder="Line" type="number" min="0" [(ngModel)]="place.line" name="line" #line="ngModel" required>
+      </md-input-container>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxFlex>
+    <div class="card-form-input" fxflex>
+      <md-input-container>
+        <input mdInput placeholder="Position" type="number" min="0" [(ngModel)]="place.position" name="position" #position="ngModel" required>
+      </md-input-container>
+    </div>
+  </div>
+</md-dialog-content>
+<md-dialog-actions>
+  <button md-button (click)="dialogRef.close(place)">Save</button>
+  <button md-button (click)="dialogRef.close()">Cancel</button>
+</md-dialog-actions>

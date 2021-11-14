@@ -1,0 +1,113 @@
+<div class="page-content">
+  <div class="page-content" *ngIf="appService.getState().disconnected">
+    <section class="bs">
+      <div class="alert alert-danger text-center">
+        <strong>The mining monitor is shutted down!</strong>
+      </div>
+    </section>
+  </div>
+  <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxFlex>
+    <lk-info-tile [title]="'Hashes'" [description]=indicators.s9TotalHashesLabel [iconClass]="'fa fa-area-chart'" [backgroundStyle]="'linear-gradient(45deg, rgb(161, 89, 255) 0px, rgb(34, 121, 255) 100%)'"
+      fxFlex="20"></lk-info-tile>
+    <lk-info-tile [title]="'S9 Active'" [description]=s9miners.length [iconClass]="'fa fa-check-circle-o'" [backgroundStyle]="'linear-gradient(45deg, rgb(161, 89, 255) 0px, rgb(34, 121, 255) 100%)'"
+      fxFlex="20"></lk-info-tile>
+    <lk-info-tile [title]="'S9 Unknown location'" [description]=indicators.s9UnknownLocation [iconClass]="'fa fa-times'" [backgroundStyle]="'linear-gradient(45deg, rgb(161, 89, 255) 0px, rgb(34, 121, 255) 100%)'"
+      fxFlex="20"></lk-info-tile>
+    <lk-info-tile [title]="'S9 Hashboard issue'" [description]=indicators.s9TotalHashboardIssue [iconClass]="'fa fa-microchip'" [backgroundStyle]="'linear-gradient(45deg, rgb(200, 30, 20) 0px, rgb(244, 67, 54) 100%)'"
+      fxFlex="20"></lk-info-tile>
+  </div>
+  <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxFlex>
+    <lk-info-tile [title]="'S9 Critical Temp'" [description]=indicators.s9TotalDanger [iconClass]="'fa fa-thermometer-full'" [backgroundStyle]="'linear-gradient(45deg, rgb(200, 30, 20) 0px, rgb(244, 67, 54) 100%)'"
+      fxFlex="20"></lk-info-tile>
+    <lk-info-tile [title]="'S9 Warning Temp'" [description]=indicators.s9TotalWarning [iconClass]="'fa fa-exclamation-triangle'" [backgroundStyle]="'linear-gradient(45deg, rgb(200, 100, 0) 0px, rgb(255, 152, 0) 100%)'"
+      fxFlex="20"></lk-info-tile>
+    <lk-info-tile [title]="'S9 Careful Temp'" [description]=indicators.s9TotalInfo [iconClass]="'fa fa-comments-o'" [backgroundStyle]="'linear-gradient(45deg, rgb(0, 100, 200) 0px, rgb(33, 150, 243) 100%)'"
+      fxFlex="20"></lk-info-tile>
+    <lk-info-tile [title]="'S9 Fine Temp'" [description]=indicators.s9TotalNormal [iconClass]="'fa fa-thumbs-o-up'" [backgroundStyle]="'linear-gradient(45deg, rgb(170, 170, 30) 0px, rgb(218, 210, 63) 100%)'"
+      fxFlex="20"></lk-info-tile>
+  </div>
+  <md-card class="page-card">
+    <md-card-title>Filters</md-card-title>
+    <md-card-content>
+      <div fxLayout="column" fxLayout.xs="column" fxLayout.sm="column">
+        <div class="card-form-input" fxflex>
+            <md-select placeholder="Select user" [(ngModel)]="selectedUser" (change)="changeUser()">
+              <md-option *ngFor="let user of users" [value]="user">
+                {{user || 'All users'}}
+              </md-option>
+            </md-select>
+        </div>
+      </div>
+    </md-card-content>
+  </md-card>
+
+  <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" fxFlex md-dynamic-height>
+    <md-card class="page-card card-content-full widget-table" fxFlex>
+      <md-card-title>
+        <span md-line>S9 Miners ({{indicators.scannedDate | date:'medium'}})</span>
+      </md-card-title>
+      <md-card-content>
+        <section class="bs">
+          <table class="table table-sm table-striped table-hover table-card">
+            <thead>
+              <tr>
+                <th>IP</th>
+                <th>User</th>
+                <th><a routerLink="/dashboard/{{selectedUser}}/hashboard">TH/s</a></th>
+                <th><a routerLink="/dashboard/{{selectedUser}}/temp">Temp</a></th>
+                <th>Fan</th>
+                <th>Location</th>
+                <th>Accepted Shares</th>
+                <th>Compile Time</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let miner of s9miners">
+                <td class="cell-detail">
+                  <span><a href="http://{{miner.network.ip}}" target="_blank">{{miner.network.ip}}</a></span>
+                  <span class="cell-detail-description">{{miner.network.macaddress}}</span>
+                  <span class="alert-danger" *ngIf="miner.alerts.info">{{miner.alerts.info}}</span>
+                  <span *ngIf="miner.isLoading">
+                    <md-progress-bar mode="indeterminate" color="warn"></md-progress-bar>
+                  </span>
+                </td>
+                <td>
+                  <span>{{miner.pools[0].user}}</span>
+                </td>
+                <td [class]="checkHashboard(miner)">
+                  <span>{{miner.summary.ghsav/1000 | number}}</span>
+                </td>
+                <td [class]="checkTemperature(miner)">
+                  <span class="text-nowrap">{{miner.temperature.temp1}} | {{miner.temperature.temp2}} | {{miner.temperature.temp3}}</span>
+                </td>
+                <td>
+                  <span class="text-nowrap">{{miner.temperature.fan3}} | {{miner.temperature.fan6}}</span>
+                </td>
+                <td>
+                  <span *ngIf="places[miner.network.macaddress]">C{{places[miner.network.macaddress].column}}L{{places[miner.network.macaddress].line}}P{{places[miner.network.macaddress].position}}</span>
+                </td>
+                <td>
+                  <span>{{miner.summary.accepted}}</span>
+                </td>
+                <td>
+                  <span>{{miner.stats.compileTime}}</span>
+                </td>
+                <td>
+                  <a md-icon-button class="mat-icon-button" aria-label="Actions" [mdMenuTriggerFor]="menu">
+                    <i class="fa fa-bars" aria-hidden="true"></i>
+                  </a>
+                  <md-menu #menu="mdMenu">
+                    <button md-menu-item (click)="edit(miner)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</button>
+                    <button md-menu-item (click)="shutdown(miner)"><i class="fa fa-power-off" aria-hidden="true"></i> Shutdown</button>
+                    <button md-menu-item (click)="reboot(miner)"><i class="fa fa-refresh" aria-hidden="true"></i> Reboot</button>
+                  </md-menu>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </md-card-content>
+    </md-card>
+  </div>
+</div>

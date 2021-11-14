@@ -1,0 +1,42 @@
+<!--Top toolbar-->
+<md-toolbar *ngIf="!appService.getState().pageFullscreen" class="topnav-container" color="primary">
+  <!--Application Title-->
+  <span class="topnav-title">
+    <img src="assets/img/simbolo-preto.png">{{appService.getState().topnavTitle}}</span>
+  <span class="toolbar-filler"></span>
+  <!--Apps Menu-->
+  <span>
+    <a md-icon-button routerLink="/dashboard">
+      <md-icon>apps</md-icon>
+    </a>
+  </span>
+  <span>
+    <a md-icon-button routerLink="/warehouse">
+      <md-icon>view_week</md-icon>
+    </a>
+  </span>
+  <span>
+    <a md-icon-button  routerLink="/config">
+      <md-icon>settings</md-icon>
+    </a>
+  </span>
+  <span fxShow.sm="false" fxShow.xs="false">
+    <a md-icon-button (click)="toggleFullscreen()">
+      <md-icon>fullscreen</md-icon>
+    </a>
+  </span>
+</md-toolbar>
+<!--Page container-->
+<md-sidenav-container>
+  <!--Page content-->
+  <div [class.page-container]="!appService.getState().pageFullscreen">
+    <router-outlet></router-outlet>
+    <!--Page footer-->
+    <md-toolbar class="page-footer" *ngIf="appService.getState().pageFooter">
+      © 2017 Versates INC.
+      <span class="filler"></span>
+      <button md-button>About</button>
+      <button md-button>Contact</button>
+    </md-toolbar>
+  </div>
+</md-sidenav-container>
